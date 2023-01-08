@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 
 class ShowAdapter(
     private val callBack: CallBack,
-) : ListAdapter<QueryResponse, ShowAdapter.ViewHolder>(ShowDiffCallback) {
+) : ListAdapter<ShowContainer, ShowAdapter.ViewHolder>(ShowDiffCallback) {
 
     interface CallBack {
         fun onShowClick(showId: Int)
@@ -32,11 +32,11 @@ class ShowAdapter(
         private val binding: ListItemShowBinding,
         private val callBack: CallBack,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: QueryResponse) {
+        fun bind(item: ShowContainer) {
             binding.txtTitle.text = item.show.name
             binding.txtDescription.text = item.show.summary
             item.show.image?.let {
-                Picasso.get().load(it.smallImage).into(binding.img)
+                Picasso.get().load(it.image).into(binding.img)
             }
 
             itemView.setOnClickListener {
@@ -46,11 +46,11 @@ class ShowAdapter(
     }
 }
 
-object ShowDiffCallback : DiffUtil.ItemCallback<QueryResponse>() {
+object ShowDiffCallback : DiffUtil.ItemCallback<ShowContainer>() {
 
-    override fun areItemsTheSame(oldItem: QueryResponse, newItem: QueryResponse): Boolean =
+    override fun areItemsTheSame(oldItem: ShowContainer, newItem: ShowContainer): Boolean =
         oldItem.show.id == newItem.show.id
 
-    override fun areContentsTheSame(oldItem: QueryResponse, newItem: QueryResponse): Boolean =
+    override fun areContentsTheSame(oldItem: ShowContainer, newItem: ShowContainer): Boolean =
         oldItem == newItem
 }

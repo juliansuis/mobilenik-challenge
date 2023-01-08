@@ -1,7 +1,7 @@
 package com.julianswiszcz.mobilenik_challenge
 
 data class ShowsResponse(
-    val showsList: List<QueryResponse>
+    val showsList: List<ShowContainer>
 )
 
-data class QueryResponse(val score: Float, val show: Show)
+data class ShowContainer(val show: Show)
