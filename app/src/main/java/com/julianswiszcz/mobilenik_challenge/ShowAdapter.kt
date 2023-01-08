@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 
 class ShowAdapter(
     private val callBack: CallBack,
-) : ListAdapter<Show, ShowAdapter.ViewHolder>(ShowDiffCallback) {
+) : ListAdapter<QueryResponse, ShowAdapter.ViewHolder>(ShowDiffCallback) {
 
     interface CallBack {
         fun onShowClick(showId: Int)
@@ -30,27 +30,27 @@ class ShowAdapter(
 
     class ViewHolder(
         private val binding: ListItemShowBinding,
-        val callBack: CallBack,
+        private val callBack: CallBack,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Show) {
-            binding.txtTitle.text = item.name
-            binding.txtDescription.text = item.summary
-            item.image?.let {
+        fun bind(item: QueryResponse) {
+            binding.txtTitle.text = item.show.name
+            binding.txtDescription.text = item.show.summary
+            item.show.image?.let {
                 Picasso.get().load(it.smallImage).into(binding.img)
             }
 
             itemView.setOnClickListener {
-                callBack.onShowClick(item.id)
+                callBack.onShowClick(item.show.id)
             }
         }
     }
 }
 
-object ShowDiffCallback : DiffUtil.ItemCallback<Show>() {
+object ShowDiffCallback : DiffUtil.ItemCallback<QueryResponse>() {
 
-    override fun areItemsTheSame(oldItem: Show, newItem: Show): Boolean =
-        oldItem.id == newItem.id
+    override fun areItemsTheSame(oldItem: QueryResponse, newItem: QueryResponse): Boolean =
+        oldItem.show.id == newItem.show.id
 
-    override fun areContentsTheSame(oldItem: Show, newItem: Show): Boolean =
+    override fun areContentsTheSame(oldItem: QueryResponse, newItem: QueryResponse): Boolean =
         oldItem == newItem
 }

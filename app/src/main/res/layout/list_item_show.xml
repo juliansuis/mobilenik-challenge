@@ -39,7 +39,7 @@
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_title"
-                tools:text="Desciption" />
+                tools:text="Description" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

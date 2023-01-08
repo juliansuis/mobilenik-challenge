@@ -5,31 +5,41 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-private const val ARG_PARAM1 = "param1"
+import androidx.fragment.app.viewModels
+import com.julianswiszcz.mobilenik_challenge.databinding.FragmentShowDetailsBinding
 
 class ShowDetailsFragment : Fragment() {
-    private var param1: String? = null
+
+    private var param1: Int? = null
+
+    private lateinit var binding: FragmentShowDetailsBinding
+    private val viewModel: ShowDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
+            param1 = it.getInt(ARG_PARAM1)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_show_details, container, false)
+    ): View = FragmentShowDetailsBinding.inflate(inflater, container, false).also {
+        binding = it
+    }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     companion object {
-        fun newInstance(param1: String) =
+        private const val ARG_PARAM1 = "param1"
+
+        fun newInstance(param1: Int) =
             ShowDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                    putInt(ARG_PARAM1, param1)
                 }
             }
     }
