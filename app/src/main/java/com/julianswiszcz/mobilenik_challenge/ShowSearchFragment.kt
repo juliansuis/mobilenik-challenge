@@ -1,12 +1,15 @@
 package com.julianswiszcz.mobilenik_challenge
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,7 +43,7 @@ class ShowSearchFragment : Fragment(R.layout.fragment_show_search),
         binding.search.setOnQueryTextListener(this)
 
         viewModel.showsList.observe(viewLifecycleOwner) {
-            adapter.submitList(it.showsList)
+            adapter.submitList(it)
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) {
@@ -60,6 +63,7 @@ class ShowSearchFragment : Fragment(R.layout.fragment_show_search),
         if (!query.isNullOrEmpty()) {
             viewModel.getAllShows(query)
         }
+        binding.search.clearFocus()
         return true
     }
 
