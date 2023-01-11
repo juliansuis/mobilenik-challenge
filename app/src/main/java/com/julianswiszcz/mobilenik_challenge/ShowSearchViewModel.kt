@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import retrofit2.Response
 
 class ShowSearchViewModel(private val repository: ShowsRepository) : ViewModel() {
 
