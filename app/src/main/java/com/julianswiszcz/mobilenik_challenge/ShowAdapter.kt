@@ -1,5 +1,7 @@
 package com.julianswiszcz.mobilenik_challenge
 
+import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -28,13 +30,18 @@ class ShowAdapter(
 
     override fun getItemViewType(position: Int): Int = R.layout.list_item_show
 
+    @Suppress("DEPRECATION")
     class ViewHolder(
         private val binding: ListItemShowBinding,
         private val callBack: CallBack,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ShowsResponse) {
             binding.txtTitle.text = item.show.name
-            binding.txtDescription.text = item.show.summary
+            binding.txtDescription.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                 Html.fromHtml(item.show.summary, 0)
+            } else {
+                Html.fromHtml(item.show.summary)
+            }
             item.show.image?.let {
                 Picasso.get().load(it.image).into(binding.img)
             }

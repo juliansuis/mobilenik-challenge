@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.julianswiszcz.mobilenik_challenge.databinding.FragmentShowDetailsBinding
 import com.squareup.picasso.Picasso
 
@@ -16,7 +18,7 @@ class ShowDetailsFragment : Fragment(R.layout.fragment_show_details) {
     private var param1: Int? = null
 
     private lateinit var binding: FragmentShowDetailsBinding
-    private val viewModel: ShowSearchViewModel by viewModels({ requireParentFragment() })
+    private lateinit var viewModel: ShowDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,13 +38,21 @@ class ShowDetailsFragment : Fragment(R.layout.fragment_show_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val repository = ShowsRepository()
+        viewModel = ViewModelProvider(
+            this,
+            MyViewModelFactory(repository)
+        )[ShowDetailsViewModel::class.java]
+
         param1?.let {
             viewModel.setShowId(it)
         }
 
         viewModel.show.observe(viewLifecycleOwner) {
-            binding.txtTitle.text = it.show.name
-            Picasso.get().load(it.show.image?.image).into(binding.img)
+            binding.txtTitle.text = it?.name
+            it?.image?.image?.let { img ->
+                Picasso.get().load(img).into(binding.img)
+            }
         }
     }
 

@@ -1,9 +1,50 @@
 package com.julianswiszcz.mobilenik_challenge
 
-class ShowsRepository constructor(private val retrofit: APIService) {
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-    suspend fun getShows(query: String) = retrofit.getShows(query)
+class ShowsRepository {
 
-    suspend fun getShowById(id: Int) = retrofit.getShowById(id)
+    fun getShows(query: String): LiveData<List<ShowsResponse>> {
+        val mResponse = MutableLiveData<List<ShowsResponse>>()
+        APIService.getInstance().getShows(query).enqueue(
+            object : Callback<List<ShowsResponse>> {
+                override fun onResponse(
+                    call: Call<List<ShowsResponse>>,
+                    response: Response<List<ShowsResponse>>
+                ) {
+                    mResponse.value = response.body()
+                }
+
+                override fun onFailure(call: Call<List<ShowsResponse>>, t: Throwable) {
+                    Log.e("JULI", t.message.orEmpty())
+                }
+            }
+        )
+        return mResponse
+    }
+
+    fun getShowById(id: Int): LiveData<Show> {
+        val mResponse = MutableLiveData<Show>()
+        APIService.getInstance().getShowById(id).enqueue(
+            object : Callback<Show> {
+                override fun onResponse(
+                    call: Call<Show>,
+                    response: Response<Show>
+                ) {
+                    mResponse.value = response.body()
+                }
+
+                override fun onFailure(call: Call<Show>, t: Throwable) {
+                    Log.e("JULI", t.message.orEmpty())
+                }
+            }
+        )
+        return mResponse
+    }
 
 }

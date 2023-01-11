@@ -1,17 +1,12 @@
 package com.julianswiszcz.mobilenik_challenge
 
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.julianswiszcz.mobilenik_challenge.databinding.FragmentShowSearchBinding
 
@@ -34,34 +29,22 @@ class ShowSearchFragment : Fragment(R.layout.fragment_show_search),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val retrofit = APIService.getInstance()
-        val repository = ShowsRepository(retrofit)
-        viewModel = ViewModelProvider(this, MyViewModelFactory(repository)).get(
-            ShowSearchViewModel::class.java
-        )
+        val repository = ShowsRepository()
+        viewModel = ViewModelProvider(
+            this,
+            MyViewModelFactory(repository)
+        )[ShowSearchViewModel::class.java]
         binding.recycler.adapter = adapter
         binding.search.setOnQueryTextListener(this)
 
-        viewModel.showsList.observe(viewLifecycleOwner) {
+        viewModel.showList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
-
-        viewModel.errorMessage.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-        }
-
-        viewModel.loading.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.progressDialog.visibility = View.VISIBLE
-            } else {
-                binding.progressDialog.visibility = View.GONE
-            }
-        })
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (!query.isNullOrEmpty()) {
-            viewModel.getAllShows(query)
+            viewModel.setQuery(query)
         }
         binding.search.clearFocus()
         return true
@@ -70,8 +53,9 @@ class ShowSearchFragment : Fragment(R.layout.fragment_show_search),
     override fun onQueryTextChange(newText: String?): Boolean {
         return true
     }
+
     override fun onShowClick(showId: Int) {
-        childFragmentManager.commit {
+        parentFragmentManager.commit {
             replace(R.id.container, ShowDetailsFragment.newInstance(showId))
         }
     }
