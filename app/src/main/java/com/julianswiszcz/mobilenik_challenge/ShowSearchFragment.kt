@@ -57,6 +57,7 @@ class ShowSearchFragment : Fragment(R.layout.fragment_show_search),
     override fun onShowClick(showId: Int) {
         parentFragmentManager.commit {
             replace(R.id.container, ShowDetailsFragment.newInstance(showId))
+            addToBackStack(null)
         }
     }
 }

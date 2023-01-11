@@ -37,11 +37,14 @@ class ShowAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ShowsResponse) {
             binding.txtTitle.text = item.show.name
-            binding.txtDescription.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                 Html.fromHtml(item.show.summary, 0)
-            } else {
-                Html.fromHtml(item.show.summary)
+            item.show.summary?.let {
+                binding.txtDescription.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Html.fromHtml(it, 0)
+                } else {
+                    Html.fromHtml(it)
+                }
             }
+
             item.show.image?.let {
                 Picasso.get().load(it.image).into(binding.img)
             }

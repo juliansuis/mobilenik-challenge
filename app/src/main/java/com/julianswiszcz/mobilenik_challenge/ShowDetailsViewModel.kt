@@ -14,6 +14,10 @@ class ShowDetailsViewModel(private val repository: ShowsRepository) : ViewModel(
         repository.getShowById(it)
     }
 
+    val episodes: LiveData<List<Show>> = showId.switchMap {
+        repository.getShowEpisodes(it)
+    }
+
     fun setShowId(id: Int) {
         _showId.value = id
     }

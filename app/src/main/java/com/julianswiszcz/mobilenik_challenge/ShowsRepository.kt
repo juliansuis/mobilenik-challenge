@@ -47,4 +47,23 @@ class ShowsRepository {
         return mResponse
     }
 
+    fun getShowEpisodes(id: Int): LiveData<List<Show>> {
+        val mResponse = MutableLiveData<List<Show>>()
+        APIService.getInstance().getShowEpisodes(id).enqueue(
+            object : Callback<List<Show>> {
+                override fun onResponse(
+                    call: Call<List<Show>>,
+                    response: Response<List<Show>>
+                ) {
+                    mResponse.value = response.body()
+                }
+
+                override fun onFailure(call: Call<List<Show>>, t: Throwable) {
+                    Log.e("JULI", t.message.orEmpty())
+                }
+            }
+        )
+        return mResponse
+    }
+
 }

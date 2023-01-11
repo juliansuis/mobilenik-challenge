@@ -14,6 +14,9 @@ interface APIService {
     @GET("shows/{id}")
     fun getShowById(@Path("id") id: Int): Call<Show>
 
+    @GET("shows/{id}/episodes")
+    fun getShowEpisodes(@Path("id") id: Int): Call<List<Show>>
+
     companion object {
         private var retrofitService: APIService? = null
         fun getInstance(): APIService {
